@@ -23,8 +23,11 @@ public class Client extends Activity {
 	private Socket socket;       
 	private BufferedReader networkReader;     
 	private BufferedWriter networkWriter;       
-	private String ip = "192.168.0.2"; // IP     
-	private int port = 9999; // PORT번호      
+	private String ip = "1.242.144.197"; // IP     
+	private int port = 22222; // PORT번호
+	EditText et;
+	Button btn;
+	TextView tv;
 	
 	@Override     
 	protected void onStop() {         
@@ -51,18 +54,19 @@ public class Client extends Activity {
 		}.start();
 		checkUpdate.start();          
 		
-		final EditText et = (EditText) findViewById(R.id.EditText01);         
-		Button btn = (Button) findViewById(R.id.Button01);         
-		final TextView tv = (TextView) findViewById(R.id.TextView01);           
+		et = (EditText) findViewById(R.id.EditText01);         
+		btn = (Button) findViewById(R.id.Button01);         
+		tv = (TextView) findViewById(R.id.TextView01);
 		btn.setOnClickListener(new OnClickListener() {               
 			public void onClick(View v) {                
 				if (et.getText().toString() != null || !et.getText().toString().equals("")) {                     
 					PrintWriter out = new PrintWriter(networkWriter, true);                     
 					String return_msg = et.getText().toString();                     
-					out.println(return_msg);                
+					out.println(return_msg);
+					out.flush();
 				}             
 			}         
-		});     
+		});
 	}       
 	
 	private Thread checkUpdate = new Thread() {           
@@ -71,9 +75,10 @@ public class Client extends Activity {
 				String line;                 
 				Log.w("ChattingStart", "Start Thread");                
 				while (true) {                     
-					Log.w("Chatting is running", "chatting is running");                     
+					Log.w("Chatting is running", "chatting is running");
 					line = networkReader.readLine();                     
-					html = line;                     
+					html = line;
+					tv.setText(html);
 					mHandler.post(showUpdate);                 
 				}             
 			} catch (Exception e) {               
@@ -84,7 +89,7 @@ public class Client extends Activity {
 	
 	private Runnable showUpdate = new Runnable() {           
 		public void run() {             
-			Toast.makeText(Client.this, "Coming word: " + html, Toast.LENGTH_SHORT).show();        
+			Toast.makeText(Client.this, "Coming word: " + html, Toast.LENGTH_LONG).show();
 		}       
 	};       
 	
