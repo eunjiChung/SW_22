@@ -13,7 +13,7 @@ Client use API 4.0
 Author: Hyuckjin Jeong  
 Date: 2016-11-17  
 Make branch 'ConstructServer'  
-Changed Client Project Name to 'SEClient'  
+Changed Server Project Name to 'SEServer'  
 Server IP and PORT changed 1.242.144.197 and 22222.  
 Not Yet receive server response although implemented code.  
 It seems that has some problems.  
