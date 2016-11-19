@@ -1,45 +1,54 @@
 package hello22.hellochat;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.text.AllCapsTransformationMethod;
+import android.support.v7.widget.ListViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.Serializable;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class FriendListActivity extends AppCompatActivity implements Serializable{
+public class FriendListActivity extends AppCompatActivity {
 
     //1-데이터를 받는 작업 필요
     //2-친구창에서 리스트를 선택해서 채팅룸을 만들었을 때 없었던 채팅방이었다면 채팅목록에 추가되어야 함
 
     private long lastTimeBackPressed;
 
+    ArrayList<String> FriendNameData = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        // Get friend info from JoinActivity
-        ArrayList<User> bringList = (ArrayList<User>)getIntent().getSerializableExtra("users");
-        final ArrayList<String> FriendList = new ArrayList<>();
-
-        Log.e("BringList", "BringList Size is " + bringList.size());
-        for (int i = 0; i < bringList.size(); i++){
-            FriendList.add((bringList.get(i).getId()));
-        }
+        //임시데이터 : 데이터 여기서 입력안하면 오류
+        FriendNameData.add("Donald Trump");
+        FriendNameData.add("Hillary Clinton");
+        FriendNameData.add("Justin Bieber");
+        FriendNameData.add("Alice");
+        FriendNameData.add("이민호");
+        FriendNameData.add("김수현");
+        FriendNameData.add("전지현");
+        FriendNameData.add("이연희");
+        FriendNameData.add("김사랑");
 
         //정렬(Adapter 생성 전)
         final Comparator<String> comparator = new Comparator<String>() {
@@ -48,10 +57,10 @@ public class FriendListActivity extends AppCompatActivity implements Serializabl
                 return Collator.getInstance().compare(obj1,obj2);
             }
         };
-        Collections.sort(FriendList, comparator);
+        Collections.sort(FriendNameData, comparator);
 
         //리스트뷰 표시를 위한 Adapter 생성
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,FriendList);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,FriendNameData);
         final ListView listview = (ListView) findViewById(R.id.listview1);
         listview.setAdapter(adapter);
 
@@ -68,7 +77,7 @@ public class FriendListActivity extends AppCompatActivity implements Serializabl
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
-                alert.setTitle(FriendList.get(position));
+                alert.setTitle(FriendNameData.get(position));
                 alert.setMessage("Move to Chat?");
                 alert.setPositiveButton("Chat", new DialogInterface.OnClickListener() {
                     @Override
