@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hello22.hellochat">
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -18,6 +19,7 @@
         <activity android:name=".FriendListActivity"/>
         <activity android:name=".ChatListActivity" />
         <activity android:name=".SettingActivity" />
+        <activity android:name=".JoinActivity" />
         <activity android:name=".ChatRoomActivity"></activity>
     </application>
 

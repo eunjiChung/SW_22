@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.ListViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,9 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FriendListActivity extends AppCompatActivity {
+public class FriendListActivity extends AppCompatActivity implements Serializable{
 
     //1-검색기능 필요
     //2-자동정렬기능 필요
@@ -29,26 +31,23 @@ public class FriendListActivity extends AppCompatActivity {
 
     private long lastTimeBackPressed;
 
-    //임시로 작성한 데이터
-    //private String[] FriendNameData = {"Donald Trump","Hillary Clinton","Justin Bieber","이민호","전지현","김수현"};
-    ArrayList<String> FriendNameData = new ArrayList<String>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        //임시데이터
-        FriendNameData.add("Donald Trump");
-        FriendNameData.add("Hillary Clinton");
-        FriendNameData.add("Justin Bieber");
-        FriendNameData.add("Alice");
-        FriendNameData.add("이민호");
-        FriendNameData.add("김수현");
-        FriendNameData.add("전지현");
+        // Get friend info from JoinActivity
+        ArrayList<User> bringList = (ArrayList<User>)getIntent().getSerializableExtra("users");
+        final ArrayList<String> FriendList = new ArrayList<>();
+
+        Log.e("BringList", "BringList Size is " + bringList.size());
+        for (int i = 0; i < bringList.size(); i++){
+            FriendList.add((bringList.get(i).getId()));
+        }
+
 
         //Listview 의 데이터를 저장할 Adapter 생성
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,FriendNameData);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,FriendList);
         final ListView listview = (ListView) findViewById(R.id.listview1);
         listview.setAdapter(adapter);
 
@@ -60,7 +59,7 @@ public class FriendListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
-                alert.setTitle(FriendNameData.get(position));
+                alert.setTitle(FriendList.get(position));
                 alert.setMessage("Move to Chat?");
                 alert.setPositiveButton("Chat", new DialogInterface.OnClickListener() {
                     @Override
