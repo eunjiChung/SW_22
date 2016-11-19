@@ -37,7 +37,7 @@ public class Server {
 			serversocket = new ServerSocket(ServerPort);
 			while (true) {
 				socket = serversocket.accept();
-				Runnable UserRun = new User(socket, UsrSocketAddr);
+				Runnable UserRun = new User(socket, UsrSocketAddr, DBJobQueue);
 				Thread UserThread = new Thread(UserRun);
 				
 				UserThread.start();

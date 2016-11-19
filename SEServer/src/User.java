@@ -21,8 +21,9 @@ public class User implements Runnable {
 	
 	public int ServerPort;
 	
-	public User(Socket socket, HashMap<String, Socket> UsrSocketAddr) {
+	public User(Socket socket, HashMap<String, Socket> UsrSocketAddr, LinkedList<JSONObject> Jobs) {
 		this.socket = socket;
+		this.Jobs = Jobs;
 		this.UsrSocketAddr = UsrSocketAddr;
 		try {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

@@ -4,8 +4,8 @@
 
 History
 
-Author: Hyuckjin Jeong  
-Date: 2016-11-10  
+Author: Hyuckjin Jeong 
+Date: 2016-11-10
 Upload Sample Java Server and Android Client.  
 This Server cannot run global environment.  
 Client use API 4.0  
@@ -18,9 +18,19 @@ Server IP and PORT changed 1.242.144.197 and 22222.
 Not Yet receive server response although implemented code.  
 It seems that has some problems.  
 
-Author: Hyckjin Jeong
-Date: 2016-11-17
-Delete directory 'SEChat'
-Add JSON library in Project 'SEServer'
-Add MySQL library in Project 'SEServer'
-Make DB named 'seserver' not attached by jdbc.
+Author: Hyckjin Jeong 
+Date: 2016-11-17 
+Delete directory 'SEChat' 
+Add JSON library in Project 'SEServer' 
+Add MySQL library in Project 'SEServer' 
+Make DB named 'seserver' not attached by jdbc. 
+
+Author: Hyuckjin Jeong 
+Date: 2016-11-19 
+Delete directory 'SEClient' 
+Make 'DBworker' Runnable class. 
+DBworker works for DB query. 
+Make 'Sendworker' Runnable class. 
+Sendworker works for sending message to client. 
+Make 'User' Runnable class.
+User works for connection and receiving message from client.
