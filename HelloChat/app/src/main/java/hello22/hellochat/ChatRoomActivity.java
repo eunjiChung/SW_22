@@ -1,7 +1,24 @@
 package hello22.hellochat;
 
+import android.content.Context;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
@@ -9,20 +26,25 @@ public class ChatRoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+
+        final ArrayList<String> items = new ArrayList<String>();
+
+        int type=0;
+        final CustomAdapter adpater = new CustomAdapter(this,0,items);
+
+        ListView listview = (ListView) findViewById(R.id.chatwindow);
+        listview.setAdapter(adpater);
+
+        //입력버튼 클릭시 리스트뷰에 에디트텍스트의 데이터가 전송되고, 에디트텍스트 초기화
+        //빈 메세지는 전송하지 않게 하는 것이 필요
+        Button inputButton = (Button) findViewById(R.id.inputmsgbutton);
+        inputButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                EditText input = (EditText) findViewById(R.id.inputtext);
+                items.add(input.getText().toString());
+                input.setText("");
+                adpater.notifyDataSetChanged();
+            }
+        });
     }
-
-
-    //TEXT 부분에 상대방 이름이 떠야함
-
-    /*
-    edittext 에서 입력받은 내용을 서버로 보냄
-    입력 후 엔터 된 메세지는 edittext 창에서 없어져야함
-    수신크기제한필요함(무한엔터가능하므로)
-    서버에서 들어오는 스트림(상대방의 메세지/입력받아 돌아오는 내 매세지)을 ListView에 출력
-    나인패치이용
-     */
-
-    //SET Button : 기타기능부여(창 혹은 팝업창)
-
-
 }

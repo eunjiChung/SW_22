@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.text.AllCapsTransformationMethod;
 import android.support.v7.widget.ListViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,19 +19,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class FriendListActivity extends AppCompatActivity {
 
-    //1-검색기능 필요
-    //2-자동정렬기능 필요
-    //3-데이터를 받는 작업 필요
-    //4-친구창에서 리스트를 선택해서 채팅룸을 만들었을 때 없었던 채팅방이었다면 채팅목록에 추가되어야 함
+    //1-데이터를 받는 작업 필요
+    //2-친구창에서 리스트를 선택해서 채팅룸을 만들었을 때 없었던 채팅방이었다면 채팅목록에 추가되어야 함
 
     private long lastTimeBackPressed;
 
-    //임시로 작성한 데이터
-    //private String[] FriendNameData = {"Donald Trump","Hillary Clinton","Justin Bieber","이민호","전지현","김수현"};
     ArrayList<String> FriendNameData = new ArrayList<String>();
 
     @Override
@@ -38,7 +39,7 @@ public class FriendListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        //임시데이터
+        //임시데이터 : 데이터 여기서 입력안하면 오류
         FriendNameData.add("Donald Trump");
         FriendNameData.add("Hillary Clinton");
         FriendNameData.add("Justin Bieber");
@@ -46,14 +47,30 @@ public class FriendListActivity extends AppCompatActivity {
         FriendNameData.add("이민호");
         FriendNameData.add("김수현");
         FriendNameData.add("전지현");
+        FriendNameData.add("이연희");
+        FriendNameData.add("김사랑");
 
-        //Listview 의 데이터를 저장할 Adapter 생성
+        //정렬(Adapter 생성 전)
+        final Comparator<String> comparator = new Comparator<String>() {
+            @Override
+            public int compare(String obj1, String obj2) {
+                return Collator.getInstance().compare(obj1,obj2);
+            }
+        };
+        Collections.sort(FriendNameData, comparator);
+
+        //리스트뷰 표시를 위한 Adapter 생성
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,FriendNameData);
         final ListView listview = (ListView) findViewById(R.id.listview1);
         listview.setAdapter(adapter);
 
-        //Listview 클릭이벤트 -> 채팅여부 묻는 팝업창 생성
-        //Chat를 클릭하면 채팅룸으로 이동
+        /*
+            Listview 클릭이벤트 -> 채팅여부 묻는 팝업창 -> Yes 선택 시 채팅방 이동
+
+            1-이미 있는 채팅방이면 채팅방을 가장 상단의 채팅리스트로 올려야함
+            2-존재 하지 않는 채팅방이면 채팅리스트 헤더에 새로운 채팅룸을 추가해야함
+            3-추가되거나 바뀐 채팅룸은 자동으로 채팅액티비티 리스트뷰에 반영되어야 함
+        */
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -74,7 +91,7 @@ public class FriendListActivity extends AppCompatActivity {
             }
         });
 
-        //EditText 에서 입력받은 값을 리스트뷰의 필터링 기능을 이용해서 띄운다.
+        //검색(EditText 에서 입력받은 값을 리스트뷰에서 필터링)
         EditText editTextFilter = (EditText)findViewById(R.id.searchInput);
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -108,7 +125,7 @@ public class FriendListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //뒤로가기버튼 클릭 -> 종료를 묻는 팝업창 생성
+    //뒤로가기버튼 클릭
     //차후수정
     @Override
     public void onBackPressed()
