@@ -17,3 +17,10 @@ Changed Server Project Name to 'SEServer'
 Server IP and PORT changed 1.242.144.197 and 22222.  
 Not Yet receive server response although implemented code.  
 It seems that has some problems.  
+
+Author: Hyckjin Jeong
+Date: 2016-11-17
+Delete directory 'SEChat'
+Add JSON library in Project 'SEServer'
+Add MySQL library in Project 'SEServer'
+Make DB named 'seserver' not attached by jdbc.
