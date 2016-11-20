@@ -11,21 +11,22 @@ import net.sf.json.JSONObject;
 
 
 public class Sendworker implements Runnable {
-	public LinkedList<JSONObject> Jobs = null;
+	public LinkedList<JSONObject> SendJobQueue = null;
 	public HashMap<String, Socket> UsrSocketAddr = null;
 	
 	public JSONObject JSONMsg = null;
 	
-	public Sendworker(LinkedList<JSONObject> Jobs, HashMap<String, Socket> UsrSocketAddr) {
-		this.Jobs = Jobs;
+	public Sendworker(LinkedList<JSONObject> SendJobQueue, HashMap<String, Socket> UsrSocketAddr) {
+		this.SendJobQueue = SendJobQueue;
 		this.UsrSocketAddr = UsrSocketAddr;
 	}
 	
 	
 	public void run() {
 		while(true) {
-			if (!Jobs.isEmpty()){
-				JSONMsg = Jobs.poll();
+			if (!SendJobQueue.isEmpty()){
+				// Poll in the job queue
+				JSONMsg = SendJobQueue.poll();
 				String Sender_pnum = (String) JSONMsg.get("Sender_pnum");
 				String Msg_type = (String) JSONMsg.get("Msg_type");
 			
@@ -33,10 +34,12 @@ public class Sendworker implements Runnable {
 			
 				switch(Msg_type) {
 				case "Reg_User":
+					// Re-send
 					socket = UsrSocketAddr.get(Sender_pnum);
 					Send(socket, JSONMsg);
 					break;
 				case "Send_msg":
+					// Send to all room member
 					JSONArray Recv_usr = JSONMsg.getJSONArray("Recv_usr");
 					for (int i = 0; i < Recv_usr.size(); i++) {
 						socket = UsrSocketAddr.get(Recv_usr.get(i));
@@ -56,6 +59,7 @@ public class Sendworker implements Runnable {
 		try {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 			out.print(JSONMsg);
+			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

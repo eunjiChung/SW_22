@@ -10,10 +10,10 @@ public class Server {
 	public static final int ServerPort = 22222;     
 	public static final String ServerIP = "1.242.144.197";
 
-	// Thread Share Queue
+	// Thread Share Data
 	public static LinkedList<JSONObject> DBJobQueue;
 	public static LinkedList<JSONObject> SendJobQueue;
-	public static HashMap<String, Socket> UsrSocketAddr;
+	public static HashMap<String, Socket> ActiveUser;
 	
 	
 	public static void main(String[] args) {
@@ -21,13 +21,15 @@ public class Server {
 		Socket socket = null;
 		DBJobQueue = new LinkedList<JSONObject>();
 		SendJobQueue = new LinkedList<JSONObject>();
-		UsrSocketAddr = new HashMap<String, Socket>();
+		ActiveUser = new HashMap<String, Socket>();
 		
+		// Create DBworker Thread
 		Runnable dbworker = new DBworker(DBJobQueue, SendJobQueue);
 		Thread DBworkerThread = new Thread(dbworker);
 		DBworkerThread.start();
 		
-		Runnable sendworker = new Sendworker(SendJobQueue, UsrSocketAddr);
+		// Create Sendworker Thread
+		Runnable sendworker = new Sendworker(SendJobQueue, ActiveUser);
 		Thread SendworkerThread = new Thread(sendworker);
 		SendworkerThread.start();
 		
@@ -35,9 +37,11 @@ public class Server {
 		
 		try {
 			serversocket = new ServerSocket(ServerPort);
+			// Multi User Connect
 			while (true) {
 				socket = serversocket.accept();
-				Runnable UserRun = new User(socket, UsrSocketAddr, DBJobQueue);
+				System.out.print("Connected IP: " + socket.getInetAddress() + "\n");
+				Runnable UserRun = new User(socket, ActiveUser, DBJobQueue);
 				Thread UserThread = new Thread(UserRun);
 				
 				UserThread.start();

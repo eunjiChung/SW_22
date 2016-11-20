@@ -32,5 +32,5 @@ Make 'DBworker' Runnable class.
 DBworker works for DB query. 
 Make 'Sendworker' Runnable class. 
 Sendworker works for sending message to client. 
-Make 'User' Runnable class.
-User works for connection and receiving message from client.
+Make 'User' Runnable class. 
+User works for connection and receiving message from client. 

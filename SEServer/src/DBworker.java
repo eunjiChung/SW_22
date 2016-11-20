@@ -20,21 +20,21 @@ public class DBworker implements Runnable {
 	private ResultSet rs;
 	
 	// Shared Queue
-	public LinkedList<JSONObject> Jobs = null;
+	public LinkedList<JSONObject> DBJobQueue = null;
 	public JSONObject JSONMsg_in = null;
 	public JSONObject JSONMsg_out = null;
-	public LinkedList<JSONObject> SendQueue = null;
+	public LinkedList<JSONObject> SendJobQueue = null;
 	
 	// Constructor
-	public DBworker(LinkedList<JSONObject> Jobs, LinkedList<JSONObject> SendQueue) {
+	public DBworker(LinkedList<JSONObject> DBJobQueue, LinkedList<JSONObject> SendJobQueue) {
 		try {
 			// Connect Database
 			con = DriverManager.getConnection("jdbc:mysql://localhost/seserverdb", "chatserver", "007459df");
 			st = con.createStatement();
 			rs = null;
 			
-			this.Jobs = Jobs;
-			this.SendQueue = SendQueue;
+			this.DBJobQueue = DBJobQueue;
+			this.SendJobQueue = SendJobQueue;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,9 +44,9 @@ public class DBworker implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			if (!Jobs.isEmpty()) {
+			if (!DBJobQueue.isEmpty()) {
 				// Poll in the job queue
-				JSONMsg_in = (JSONObject) Jobs.poll();
+				JSONMsg_in = (JSONObject) DBJobQueue.poll();
 				String Sender_pnum = (String) JSONMsg_in.get("Sender_pnum");
 				String Msg_type = (String) JSONMsg_in.get("Msg_type");
 
@@ -128,7 +128,7 @@ public class DBworker implements Runnable {
 			JSONMsg_out.put("Friend_pnum", Friend_out_JSONArray);
 			
 			// Put the message in SendQueue
-			SendQueue.add(JSONMsg_out);
+			SendJobQueue.add(JSONMsg_out);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -188,7 +188,7 @@ public class DBworker implements Runnable {
 			JSONMsg_out.put("Recv_usr", Recv_usr);
 			JSONMsg_out.put("Room_id", rid);
 			
-			SendQueue.add(JSONMsg_out);
+			SendJobQueue.add(JSONMsg_out);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

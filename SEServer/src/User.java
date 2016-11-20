@@ -9,22 +9,22 @@ import net.sf.json.JSONObject;
 
 
 public class User implements Runnable {
-	public String User_pnum;;
+	public String User_pnum;
 	BufferedReader in;
 	
 	Socket socket;
 	
-	public LinkedList<JSONObject> Jobs = null;
-	public HashMap<String, Socket> UsrSocketAddr = null;
+	public LinkedList<JSONObject> DBJobQueue = null;
+	public HashMap<String, Socket> ActiveUser = null;
 	
 	public JSONObject JSONMsg = null;
 	
 	public int ServerPort;
 	
-	public User(Socket socket, HashMap<String, Socket> UsrSocketAddr, LinkedList<JSONObject> Jobs) {
+	public User(Socket socket, HashMap<String, Socket> UsrSocketAddr, LinkedList<JSONObject> DBJobQueue) {
 		this.socket = socket;
-		this.Jobs = Jobs;
-		this.UsrSocketAddr = UsrSocketAddr;
+		this.DBJobQueue = DBJobQueue;
+		this.ActiveUser = UsrSocketAddr;
 		try {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
@@ -33,19 +33,16 @@ public class User implements Runnable {
 		}
 	}
 	
-	public void SetUserPnum(String User_pnum) {
-		this.User_pnum = User_pnum;
-	}
-	
 	public void run() {
 		while (true) {
 			try {
 				JSONMsg = JSONObject.fromObject(in.readLine());
-				SetUserPnum(JSONMsg.get("Sender_pnum").toString());
-				if (UsrSocketAddr.get(this.User_pnum) != null) {
-					UsrSocketAddr.put(this.User_pnum, socket);
+				this.User_pnum = JSONMsg.get("Sender_pnum").toString();
+				// Add the user phone number and socket
+				if (ActiveUser.get(this.User_pnum) != null) {
+					ActiveUser.put(this.User_pnum, socket);
 				}
-				Jobs.add(JSONMsg);
+				DBJobQueue.add(JSONMsg);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
