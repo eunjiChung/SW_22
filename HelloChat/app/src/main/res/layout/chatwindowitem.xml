@@ -7,17 +7,26 @@
     android:gravity="center_vertical"
     android:id="@+id/layout">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageView"
-        />
+    <View        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:id="@+id/Viewleft"
+        android:background="#888888"
+        android:layout_weight="1"
+        android:layout_margin="10dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/wow"/>
+        android:background="@drawable/wow"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:id="@+id/Viewright"
+        android:background="#888888"
+        android:layout_weight="1"
+        android:layout_margin="10dp" />
 
 </LinearLayout>

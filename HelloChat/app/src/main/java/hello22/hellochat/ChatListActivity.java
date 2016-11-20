@@ -15,16 +15,7 @@ import java.util.ArrayList;
 
 public class ChatListActivity extends AppCompatActivity {
 
-    //친구창의 리스트뷰와 비슷하게
-    //이벤트 : click -> 채팅룸이동
-    //이벤트 : longclick -> 채팅룸을 삭제할까요? 팝업창 -> yes 선택 시 채팅방에서 퇴장 후, 채팅리스트에서 삭제
-
-    private long lastTimeBackPressed;
-
-    //임시로 작성한 데이터
-    //private String[] ChatingData = {"이민호","전지현","김수현"};
     ArrayList<String> ChatingData = new ArrayList<String>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +26,6 @@ public class ChatListActivity extends AppCompatActivity {
         ChatingData.add("전지현");
         ChatingData.add("김수현");
 
-        //Listview 의 데이터를 저장할 Adapter 생성
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,ChatingData);
         ListView listview = (ListView) findViewById(R.id.listview2);
         listview.setAdapter(adapter);
@@ -89,13 +79,8 @@ public class ChatListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-        if(System.currentTimeMillis() - lastTimeBackPressed < 1500) {
-            moveTaskToBack(true);
-            finish();
-            android.os.Process.killProcess(android.os.Process.myPid());
-        }
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-        lastTimeBackPressed = System.currentTimeMillis();
+        moveTaskToBack(true);
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

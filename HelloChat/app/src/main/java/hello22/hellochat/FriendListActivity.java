@@ -1,10 +1,14 @@
 package hello22.hellochat;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.text.AllCapsTransformationMethod;
+import android.support.v7.widget.ListViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,19 +17,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.Serializable;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class FriendListActivity extends AppCompatActivity implements Serializable{
+public class FriendListActivity extends AppCompatActivity {
 
     //1-데이터를 받는 작업 필요
     //2-친구창에서 리스트를 선택해서 채팅룸을 만들었을 때 없었던 채팅방이었다면 채팅목록에 추가되어야 함
-
-    private long lastTimeBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,6 @@ public class FriendListActivity extends AppCompatActivity implements Serializabl
         };
         Collections.sort(FriendList, comparator);
 
-        //리스트뷰 표시를 위한 Adapter 생성
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,FriendList);
         final ListView listview = (ListView) findViewById(R.id.listview1);
         listview.setAdapter(adapter);
@@ -116,21 +119,12 @@ public class FriendListActivity extends AppCompatActivity implements Serializabl
         startActivity(intent);
     }
 
-    //뒤로가기버튼 클릭
-    //차후수정
     @Override
     public void onBackPressed()
     {
-
-       if(System.currentTimeMillis() - lastTimeBackPressed < 1500) {
-            moveTaskToBack(true);
-            finish();
-            android.os.Process.killProcess(android.os.Process.myPid());
-        }
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-        lastTimeBackPressed = System.currentTimeMillis();
-
+        moveTaskToBack(true);
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
 }

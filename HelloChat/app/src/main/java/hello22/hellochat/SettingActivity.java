@@ -31,13 +31,8 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-        if(System.currentTimeMillis() - lastTimeBackPressed < 1500) {
-            moveTaskToBack(true);
-            finish();
-            android.os.Process.killProcess(android.os.Process.myPid());
-        }
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-        lastTimeBackPressed = System.currentTimeMillis();
+        moveTaskToBack(true);
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

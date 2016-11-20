@@ -27,23 +27,36 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
 
-        final ArrayList<String> items = new ArrayList<String>();
-
-        int type=0;
-        final CustomAdapter adpater = new CustomAdapter(this,0,items);
-
+        final CustomAdapter adapter = new CustomAdapter();
         ListView listview = (ListView) findViewById(R.id.chatwindow);
-        listview.setAdapter(adpater);
+        listview.setAdapter(adapter);
 
-        //입력버튼 클릭시 리스트뷰에 에디트텍스트의 데이터가 전송되고, 에디트텍스트 초기화
-        //빈 메세지는 전송하지 않게 하는 것이 필요
+        /*
+            화면에 데이터 띄우는 코드, data는 받아와야함
+            1-내가쓴글 : adpater.add(data,0);      //처리완료
+            2-상대방이쓴글 : adapter.add(data,1);   //데이터를 받는 코드와 같이 써주면 됩니다
+         */
+
+        adapter.add("Hello",1);
+        adapter.add("World",0);
+
+        //버튼 클릭시 입력한 데이터를 전송
+        //데이터를 동시에 서버에 전송함
         Button inputButton = (Button) findViewById(R.id.inputmsgbutton);
         inputButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 EditText input = (EditText) findViewById(R.id.inputtext);
-                items.add(input.getText().toString());
-                input.setText("");
-                adpater.notifyDataSetChanged();
+                String inputdata = input.getText().toString();
+
+                if(inputdata.getBytes().length <= 0){
+                    //공백처리 : 아무것도 하지 않는다
+                    //근데 스페이스바는 전송됨ㅋㅋ...
+                }
+                else {
+                    input.setText(null);
+                    adapter.add(inputdata, 0);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }

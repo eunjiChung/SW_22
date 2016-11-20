@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,13 +23,14 @@ public class MainActivity extends AppCompatActivity {
         get = new GetFromPhoneActivity();
         idInput = (EditText) findViewById(R.id.idInput);
         pwdInput = (EditText) findViewById(R.id.pwdInput);
-
     }
 
-//    public boolean validLogin(String id, String pwd){
-//        // TODO : login info validation
-//
-//    }
+    /*
+        public boolean validLogin(String id, String pwd){
+        TODO : login info validation
+
+        }
+    */
 
     public void ClickJoinButton(View v){
         Intent intent = new Intent(this, JoinActivity.class);
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void ClickStartButton(View v)
     {
+
         id = idInput.getText().toString();
         pwd = pwdInput.getText().toString();
 

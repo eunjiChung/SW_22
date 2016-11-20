@@ -41,9 +41,15 @@
         android:layout_height="200dp"
         android:layout_above="@+id/editText"
         android:id="@+id/chatwindow"
-        android:transcriptMode="alwaysScroll"
         android:layout_weight="1"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="singleChoice"
+        android:layout_margin="5dp"
+        android:dividerHeight="3dp"
+        android:background="@android:color/background_light"
+        android:divider="@android:color/background_light"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:transcriptMode="alwaysScroll"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -65,7 +71,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/inputmsgbutton"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"/>
     </LinearLayout>
 
 </LinearLayout>
