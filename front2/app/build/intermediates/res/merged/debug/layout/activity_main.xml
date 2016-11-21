@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="com.example.twih.front.MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="HELLO CHAT"
+        android:id="@+id/text"
+        android:textColor="#FFB2EBF4"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"/>
+
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:id="@+id/idInput"
+        android:hint="Input your ID"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:id="@+id/pwdInput"
+        android:hint="Input your password"
+        android:layout_marginLeft="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/idInput"/>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:text="Start Chat"
+        android:id="@+id/startbutton"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:onClick="ClickStartButton"
+        android:background="#FFB2EBF4"
+        android:layout_below="@+id/pwdInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Sign Up"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:id="@+id/signupButton"
+        android:background="#FFB2EBF4"
+        android:onClick="ClickSignup"
+        android:textAllCaps="false"
+        android:layout_alignRight="@+id/pwdInput"
+        android:layout_alignEnd="@+id/pwdInput"
+        android:layout_alignTop="@+id/startbutton" />
+
+</RelativeLayout>

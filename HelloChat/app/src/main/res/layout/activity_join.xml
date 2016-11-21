@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:hint="ID"
+        android:ems="10"
+        android:id="@+id/idInput2"
+        android:layout_weight="1"
+        android:layout_marginTop="100dp"/>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:hint="Name"
+        android:ems="10"
+        android:id="@+id/nameInput"
+        android:layout_weight="1" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:ems="10"
+        android:id="@+id/pwdInput2"
+        android:layout_weight="1" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:inputType="phone"
+        android:hint="Phone Number (without ' - ' )"
+        android:ems="10"
+        android:id="@+id/phoneInput"
+        android:layout_weight="1" />
+
+    <Button
+        android:text="JOIN"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:id="@+id/joinButton2"
+        android:onClick="ClickJoinButton2"
+        android:background="#FFB2EBF4"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>
