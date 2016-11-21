@@ -5,7 +5,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import net.sf.json.JSONObject;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 
 public class Client implements Runnable {
@@ -35,15 +36,15 @@ public class Client implements Runnable {
 	
 	public void run() {
 		while (true) {
-			try {
-				JSONMsg = JSONObject.fromObject(in.readLine());
+			try{
+				JSONMsg = new JSONObject(in.readLine());
 				this.User_pnum = JSONMsg.get("Sender_pnum").toString();
 				// Add the user phone number and socket
 				if (ActiveUser.get(this.User_pnum) != null) {
 					ActiveUser.put(this.User_pnum, socket);
 				}
 				DBJobQueue.add(JSONMsg);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
