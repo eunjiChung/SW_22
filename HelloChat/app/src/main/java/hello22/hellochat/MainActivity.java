@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     /*
         public boolean validLogin(String id, String pwd){
         TODO : login info validation
-
         }
     */
 
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void ClickStartButton(View v)
     {
-
+        /*
         id = idInput.getText().toString();
         pwd = pwdInput.getText().toString();
 
@@ -53,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("users", userList);
             startActivity(intent);
         }
+        */
 
+        Intent intent = new Intent(this,FriendListActivity.class);
+        startActivity(intent);
     }
 
     @Override

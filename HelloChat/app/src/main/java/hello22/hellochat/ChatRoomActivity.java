@@ -1,6 +1,7 @@
 package hello22.hellochat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,11 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
 
+        //Setting title of ChatRoom
+        Intent intent = getIntent();
+        TextView text = (TextView) findViewById(R.id.textView2);
+        text.setText(intent.getStringExtra("name"));
+
         final CustomAdapter adapter = new CustomAdapter();
         ListView listview = (ListView) findViewById(R.id.chatwindow);
         listview.setAdapter(adapter);
@@ -40,8 +46,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         adapter.add("Hello",1);
         adapter.add("World",0);
 
-        //버튼 클릭시 입력한 데이터를 전송
-        //데이터를 동시에 서버에 전송함
+        //Button Click Event
         Button inputButton = (Button) findViewById(R.id.inputmsgbutton);
         inputButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
@@ -49,8 +54,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                 String inputdata = input.getText().toString();
 
                 if(inputdata.getBytes().length <= 0){
-                    //공백처리 : 아무것도 하지 않는다
-                    //근데 스페이스바는 전송됨ㅋㅋ...
+                    //Input Blank -> Do Nothing
+                    //근데 스페이스바는 전송됨...
                 }
                 else {
                     input.setText(null);

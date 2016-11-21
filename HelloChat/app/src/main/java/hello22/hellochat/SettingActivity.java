@@ -9,8 +9,6 @@ import android.widget.Toast;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private long lastTimeBackPressed;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

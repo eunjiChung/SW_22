@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_friend_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,7 +8,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -20,7 +23,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/button2"
             android:layout_weight="1"
-            android:background="#FFffffff" />
+            android:background="@color/colorPrimaryDark" />
 
         <Button
             android:text="ChatList"
@@ -41,15 +44,36 @@
             android:onClick="ClickSettingButton" />
     </LinearLayout>
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchInput" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/searchicon"
+            android:id="@+id/imageView"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchInput"
+            android:lines = "1"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" />
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listview1"
         android:textFilterEnabled="true"
-        android:divider="#ffffff"/>
+        android:divider="#ffffff"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
 </LinearLayout>

@@ -28,24 +28,31 @@ import java.util.Comparator;
 
 public class FriendListActivity extends AppCompatActivity {
 
-    //1-데이터를 받는 작업 필요
-    //2-친구창에서 리스트를 선택해서 채팅룸을 만들었을 때 없었던 채팅방이었다면 채팅목록에 추가되어야 함
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        // Get friend info from JoinActivity
-        ArrayList<User> bringList = (ArrayList<User>)getIntent().getSerializableExtra("users");
+        //Get friend info from JoinActivity
+        //ArrayList<User> bringList = (ArrayList<User>)getIntent().getSerializableExtra("users");
         final ArrayList<String> FriendList = new ArrayList<>();
 
+        /*
         Log.e("BringList", "BringList Size is " + bringList.size());
         for (int i = 0; i < bringList.size(); i++){
             FriendList.add((bringList.get(i).getId()));
         }
+        */
 
-        //정렬(Adapter 생성 전)
+        //임시데이터
+        FriendList.add("수지");
+        FriendList.add("박보검");
+        FriendList.add("혜리");
+        FriendList.add("고경표");
+        FriendList.add("서강준");
+        FriendList.add("김유정");
+
+        //Array(Before Adapter Create)
         final Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(String obj1, String obj2) {
@@ -59,24 +66,29 @@ public class FriendListActivity extends AppCompatActivity {
         listview.setAdapter(adapter);
 
         /*
-            Listview 클릭이벤트 -> 채팅여부 묻는 팝업창 -> Yes 선택 시 채팅방 이동
-
-            1-이미 있는 채팅방이면 채팅방을 가장 상단의 채팅리스트로 올려야함
-            2-존재 하지 않는 채팅방이면 채팅리스트 헤더에 새로운 채팅룸을 추가해야함
-            3-추가되거나 바뀐 채팅룸은 자동으로 채팅액티비티 리스트뷰에 반영되어야 함
+            Listview Click Event -> Popup -> Choose 'Chat' Move ChatRoom
         */
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+            public void onItemClick(AdapterView<?> parent, View v, final int position, long id)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
                 alert.setTitle(FriendList.get(position));
                 alert.setMessage("Move to Chat?");
+
                 alert.setPositiveButton("Chat", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         Intent intent = new Intent(FriendListActivity.this,ChatRoomActivity.class);
+                        intent.putExtra("name",FriendList.get(position));
+
+                        /*
+                           채팅방리스트에 추가하기
+                           1-이미 있다 : 대화목록을 불러와서 채팅방에 띄운다
+                           2-없다 : 채팅방을 만든 후, 채팅방리스트에 추가시킨다
+                         */
+
                         startActivity(intent);
                     }
                 });
@@ -85,7 +97,7 @@ public class FriendListActivity extends AppCompatActivity {
             }
         });
 
-        //검색(EditText 에서 입력받은 값을 리스트뷰에서 필터링)
+        //Search(Filtering)
         EditText editTextFilter = (EditText)findViewById(R.id.searchInput);
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -104,10 +116,8 @@ public class FriendListActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
-    //화면전환
     public void ClickChatListButton(View v)
     {
         Intent intent = new Intent(this,ChatListActivity.class);
