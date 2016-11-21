@@ -41,7 +41,7 @@ public class Server {
 			while (true) {
 				socket = serversocket.accept();
 				System.out.print("Connected IP: " + socket.getInetAddress() + "\n");
-				Runnable UserRun = new User(socket, ActiveUser, DBJobQueue);
+				Runnable UserRun = new Client(socket, ActiveUser, DBJobQueue);
 				Thread UserThread = new Thread(UserRun);
 				
 				UserThread.start();

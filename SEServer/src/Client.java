@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import net.sf.json.JSONObject;
 
 
-public class User implements Runnable {
+public class Client implements Runnable {
 	public String User_pnum;
 	BufferedReader in;
 	
@@ -21,7 +21,7 @@ public class User implements Runnable {
 	
 	public int ServerPort;
 	
-	public User(Socket socket, HashMap<String, Socket> UsrSocketAddr, LinkedList<JSONObject> DBJobQueue) {
+	public Client(Socket socket, HashMap<String, Socket> UsrSocketAddr, LinkedList<JSONObject> DBJobQueue) {
 		this.socket = socket;
 		this.DBJobQueue = DBJobQueue;
 		this.ActiveUser = UsrSocketAddr;
