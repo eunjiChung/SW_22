@@ -37,12 +37,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         ListView listview = (ListView) findViewById(R.id.chatwindow);
         listview.setAdapter(adapter);
 
-        /*
-            화면에 데이터 띄우는 코드, data는 받아와야함
-            1-내가쓴글 : adpater.add(data,0);      //처리완료
-            2-상대방이쓴글 : adapter.add(data,1);   //데이터를 받는 코드와 같이 써주면 됩니다
-         */
-
         adapter.add("Hello",1);
         adapter.add("World",0);
 
@@ -60,9 +54,16 @@ public class ChatRoomActivity extends AppCompatActivity {
                 else {
                     input.setText(null);
                     adapter.add(inputdata, 0);
+                    //서버에 데이터를 전송하는 코드를 넣는다
                     adapter.notifyDataSetChanged();
                 }
             }
         });
+
+        /*
+        서버에서 데이터가 들어오면
+        adapter.add(data,1)
+         */
+
     }
 }

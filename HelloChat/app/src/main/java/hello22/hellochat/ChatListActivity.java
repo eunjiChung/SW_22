@@ -26,6 +26,7 @@ public class ChatListActivity extends AppCompatActivity {
         ChatingData.add("이민호");
         ChatingData.add("전지현");
         ChatingData.add("김수현");
+        //외부에 짜서 호출하는 형식으로 짜야함
 
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,ChatingData);
         ListView listview = (ListView) findViewById(R.id.listview2);

@@ -42,9 +42,9 @@ public class JoinActivity extends AppCompatActivity{
             Toast.makeText(this, "Please insert all the info", Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this, "Welcome " + name + "!!", Toast.LENGTH_LONG).show();
-            userList = get.GetAddress();
+            //userList = get.GetAddress();
             Intent intent = new Intent(this,FriendListActivity.class);
-            intent.putExtra("users", userList);
+            //intent.putExtra("users", userList);
             startActivity(intent);
         }
     }

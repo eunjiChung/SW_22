@@ -52,7 +52,7 @@ public class FriendListActivity extends AppCompatActivity {
         FriendList.add("서강준");
         FriendList.add("김유정");
 
-        //Array(Before Adapter Create)
+        //Order(Before Adapter Create)
         final Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(String obj1, String obj2) {
@@ -84,9 +84,12 @@ public class FriendListActivity extends AppCompatActivity {
                         intent.putExtra("name",FriendList.get(position));
 
                         /*
+                        // 여기 감도 안잡힌다...ㅎ
                            채팅방리스트에 추가하기
-                           1-이미 있다 : 대화목록을 불러와서 채팅방에 띄운다
-                           2-없다 : 채팅방을 만든 후, 채팅방리스트에 추가시킨다
+                           : 서버에 채팅방리스트 추가
+                           : 추가된 채팅방아이템이 채팅리스트화면에 떠야함 (어떻게..?)
+                           채팅방리스트 불러오기
+                           : 서버가 저장하고 있는 데이터를 화면에 띄운다
                          */
 
                         startActivity(intent);

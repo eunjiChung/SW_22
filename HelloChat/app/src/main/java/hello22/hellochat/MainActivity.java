@@ -38,22 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void ClickStartButton(View v)
     {
-        /*
-        id = idInput.getText().toString();
-        pwd = pwdInput.getText().toString();
-
-        if(id.length() == 0 || pwd.length() == 0){
-            Toast.makeText(this, "Please insert Info", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Welcome " + id + "!!", Toast.LENGTH_LONG).show();
-
-            ArrayList<User> userList = get.GetAddress();
-            Intent intent = new Intent(this,FriendListActivity.class);
-            intent.putExtra("users", userList);
-            startActivity(intent);
-        }
-        */
-
         Intent intent = new Intent(this,FriendListActivity.class);
         startActivity(intent);
     }
