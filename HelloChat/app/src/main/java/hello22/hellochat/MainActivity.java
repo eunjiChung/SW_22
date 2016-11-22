@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         userAdd();
     }
 
-
     // 주소록 접근 권한 동의 method
     public void checkPerm(){
         // Here, thisActivity is the current activity
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             // 권한 없음
-        }else{
+        }else {
             // 권한 있음
         }
     }

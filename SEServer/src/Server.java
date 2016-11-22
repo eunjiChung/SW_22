@@ -4,16 +4,16 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import net.sf.json.JSONObject;
+import org.json.JSONObject;
 
 public class Server {       
-	public static final int ServerPort = 22222;     
-	public static final String ServerIP = "1.242.144.197";
+	private static final int ServerPort = 22222;
+	private static final String ServerIP = "1.242.144.197";
 
 	// Thread Share Data
-	public static LinkedList<JSONObject> DBJobQueue;
-	public static LinkedList<JSONObject> SendJobQueue;
-	public static HashMap<String, Socket> ActiveUser;
+	private static LinkedList<JSONObject> DBJobQueue;
+	private static LinkedList<JSONObject> SendJobQueue;
+	private static HashMap<String, Socket> ActiveUser;
 	
 	
 	public static void main(String[] args) {

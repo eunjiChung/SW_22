@@ -69,11 +69,19 @@ public class FriendListActivity extends AppCompatActivity {
                 Log.d("FriendList", FriendList.toString());
             }
             Log.d("userList", "Done updating List!!");
-        }else{
+        }else {
             Log.e("FriendListActivityError", "This is wrong flag!!!!!!!");
         }
 
-        //정렬(Adapter 생성 전)
+        //임시데이터
+        FriendList.add("수지");
+        FriendList.add("박보검");
+        FriendList.add("혜리");
+        FriendList.add("고경표");
+        FriendList.add("서강준");
+        FriendList.add("김유정");
+
+        //Order(Before Adapter Create)
         final Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(String obj1, String obj2) {
@@ -89,24 +97,32 @@ public class FriendListActivity extends AppCompatActivity {
 
 
         /*
-            Listview 클릭이벤트 -> 채팅여부 묻는 팝업창 -> Yes 선택 시 채팅방 이동
-
-            1-이미 있는 채팅방이면 채팅방을 가장 상단의 채팅리스트로 올려야함
-            2-존재 하지 않는 채팅방이면 채팅리스트 헤더에 새로운 채팅룸을 추가해야함
-            3-추가되거나 바뀐 채팅룸은 자동으로 채팅액티비티 리스트뷰에 반영되어야 함
+            Listview Click Event -> Popup -> Choose 'Chat' Move ChatRoom
         */
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+            public void onItemClick(AdapterView<?> parent, View v, final int position, long id)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
                 alert.setTitle(FriendList.get(position));
                 alert.setMessage("Move to Chat?");
+
                 alert.setPositiveButton("Chat", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         Intent intent = new Intent(FriendListActivity.this,ChatRoomActivity.class);
+                        intent.putExtra("name",FriendList.get(position));
+
+                        /*
+                        // 여기 감도 안잡힌다...ㅎ
+                           채팅방리스트에 추가하기
+                           : 서버에 채팅방리스트 추가
+                           : 추가된 채팅방아이템이 채팅리스트화면에 떠야함 (어떻게..?)
+                           채팅방리스트 불러오기
+                           : 서버가 저장하고 있는 데이터를 화면에 띄운다
+                         */
+
                         startActivity(intent);
                     }
                 });
@@ -115,7 +131,7 @@ public class FriendListActivity extends AppCompatActivity {
             }
         });
 
-        //검색(EditText 에서 입력받은 값을 리스트뷰에서 필터링)
+        //Search(Filtering)
         EditText editTextFilter = (EditText)findViewById(R.id.searchInput);
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -134,10 +150,8 @@ public class FriendListActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
-    //화면전환
     public void ClickChatListButton(View v)
     {
         Intent intent = new Intent(this,ChatListActivity.class);

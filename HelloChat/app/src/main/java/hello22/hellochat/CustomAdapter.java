@@ -90,10 +90,12 @@ public class CustomAdapter extends BaseAdapter {
         text.setText(ItemList.get(position).msg);
 
         if( ItemList.get(position).type == ITEM_VIEW_TYPE_Other ) {
+            text.setBackgroundResource(R.drawable.use4);
             layout.setGravity(Gravity.LEFT);
             viewRight.setVisibility(View.GONE);
             viewLeft.setVisibility(View.GONE);
         }else if(ItemList.get(position).type == ITEM_VIEW_TYPE_Me ){
+            text.setBackgroundResource(R.drawable.use3);
             layout.setGravity(Gravity.RIGHT);
             viewRight.setVisibility(View.GONE);
             viewLeft.setVisibility(View.GONE);

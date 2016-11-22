@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,27 +26,29 @@ public class ChatListActivity extends AppCompatActivity {
         ChatingData.add("이민호");
         ChatingData.add("전지현");
         ChatingData.add("김수현");
+        //외부에 짜서 호출하는 형식으로 짜야함
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,ChatingData);
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,ChatingData);
         ListView listview = (ListView) findViewById(R.id.listview2);
         listview.setAdapter(adapter);
 
-        //Listview 클릭이벤트 -> 채팅룸으로 이동
+        //Listview Click Event -> Move to Chat room
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
                 Intent intent = new Intent(ChatListActivity.this,ChatRoomActivity.class);
+                intent.putExtra("name",ChatingData.get(position));
                 startActivity(intent);
             }
         });
 
-        //Listview long click -> 삭제하냐는 메세지 출력
+        //Listview long click Event -> Delete Popup
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
+            public boolean onItemLongClick(AdapterView<?> parent, View v, final int position, long id)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
                 alert.setTitle(ChatingData.get(position));
@@ -54,15 +57,14 @@ public class ChatListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         dialog.dismiss();
-                        //여기에 삭제코드 필요
+                        ChatingData.remove(position);
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 alert.show();
-                return false;
-
+                return true;    //true->No duplicate Event
             }
         });
-
     }
 
     public void ClickFriendButton(View v)

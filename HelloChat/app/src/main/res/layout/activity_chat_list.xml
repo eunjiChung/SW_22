@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/button3"
             android:layout_weight="1"
-            android:background="#FFffffff" />
+            android:background="@color/colorPrimaryDark" />
 
         <Button
             android:text="SETTING"
@@ -45,6 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listview2"
-        android:divider="#ffffff"/>
+        android:divider="#ffffff"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
 
 </LinearLayout>

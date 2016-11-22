@@ -1,23 +1,13 @@
 package hello22.hellochat;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-
-/**
- * Created by twih on 2016. 11. 19..
- */
 
 public class JoinActivity extends AppCompatActivity{
 
@@ -39,13 +29,14 @@ public class JoinActivity extends AppCompatActivity{
         phoneInput = (EditText) findViewById(R.id.phoneInput);
     }
 
+
     public void ClickJoinButton2(View v){
         id = idInput.getText().toString();
         pwd = pwdInput.getText().toString();
         name = nameInput.getText().toString();
         phone = phoneInput.getText().toString();
 
-        // TODO : check user_info validation
+        //TODO : check user_info validation
         if(id.length() == 0 || pwd.length() == 0 || name.length() == 0 || phone.length() == 0){
             Toast.makeText(this, "Please insert all the info", Toast.LENGTH_LONG).show();
         }else{
@@ -53,7 +44,7 @@ public class JoinActivity extends AppCompatActivity{
             Intent intent = new Intent(this,FriendListActivity.class);
             intent.putExtra("flag", flag);
             startActivity(intent);
-
         }
     }
+
 }
