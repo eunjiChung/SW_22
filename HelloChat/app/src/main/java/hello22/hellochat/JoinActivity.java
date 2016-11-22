@@ -23,24 +23,23 @@ public class JoinActivity extends AppCompatActivity{
 
     EditText idInput, pwdInput, nameInput, phoneInput;
     String id, pwd, name, phone;
-    ArrayList<User> userList;
+    int flag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
+        Intent intent = new Intent(this.getIntent());
+        flag = intent.getIntExtra("flag", 1);
+
         idInput = (EditText) findViewById(R.id.idInput2);
         pwdInput = (EditText) findViewById(R.id.pwdInput2);
         nameInput = (EditText) findViewById(R.id.nameInput);
         phoneInput = (EditText) findViewById(R.id.phoneInput);
-
-        userList = new ArrayList<User>();
     }
 
     public void ClickJoinButton2(View v){
-
-        GetFromPhoneActivity get = new GetFromPhoneActivity();
         id = idInput.getText().toString();
         pwd = pwdInput.getText().toString();
         name = nameInput.getText().toString();
@@ -51,9 +50,8 @@ public class JoinActivity extends AppCompatActivity{
             Toast.makeText(this, "Please insert all the info", Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this, "Welcome " + name + "!!", Toast.LENGTH_LONG).show();
-            userList = get.GetAddress();
             Intent intent = new Intent(this,FriendListActivity.class);
-            intent.putExtra("users", userList);
+            intent.putExtra("flag", flag);
             startActivity(intent);
 
         }

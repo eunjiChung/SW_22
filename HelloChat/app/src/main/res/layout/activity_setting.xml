@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -43,13 +44,36 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="465dp"
+        android:id="@+id/setting_layout">
+
+        <Button
+            android:text="NOTICE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/notice"
+            android:background="#FFffffff"
+            android:onClick="ClickNotice"/>
+
+        <Button
+            android:text="UPDATE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/update_friend"
+            android:background="#FFffffff"
+            android:onClick="ClickUpdate"/>
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:inputType="textMultiLine"
         android:text="Version 1.0\nGroup.22"
         android:id="@+id/textView"
-        android:layout_weight="1"
         android:textAlignment="center"
         android:textColor="#FF000000"
         android:gravity="center" />
