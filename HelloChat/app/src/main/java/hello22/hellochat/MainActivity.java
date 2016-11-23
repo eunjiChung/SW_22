@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
      */
     int flag;
     ArrayList<User> user = new ArrayList<>();
+    static int i = 0;
 
 
     @Override
@@ -69,20 +70,37 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Please insert Info", Toast.LENGTH_LONG).show();
         } else {
             // Check validLogin
-            for (int i = 0; i < user.size(); i++){
-                if((user.get(i)).getId() == id && (user.get(i)).getPwd() == pwd){
-                    Toast.makeText(this, "Login Success!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(this,FriendListActivity.class);
-                    intent.putExtra("flag", flag);
-                    intent.putExtra("user_id", id);
-                    startActivity(intent);
-                }else if((user.get(i)).getId() == id && (user.get(i)).getPwd() == pwd){
-                    Toast.makeText(this, "Invalid info.\n Please check our id or pwd.", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(this, "Not our user.\n Please Join.", Toast.LENGTH_LONG).show();
-                }
+            if (validLogin(id, pwd) == 0) {
+                Toast.makeText(this, "Login Success!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, FriendListActivity.class);
+                intent.putExtra("flag", flag);
+                intent.putExtra("user_id", id);
+                startActivity(intent);
+            } else if(validLogin(id, pwd) == 2){
+                Toast.makeText(this, "Please Check your id or pwd", Toast.LENGTH_LONG).show();
+            } else if(validLogin(id, pwd) == 1){
+                Toast.makeText(this, "NOT OUR USER. PLEASE JOIN.", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public int validLogin(String id, String pwd){
+        Log.d("login_info", "Trying login validation.....");
+
+        for(i = 0; i < user.size(); i++){
+            Log.d("login_info", i + ": " + (user.get(i)).getId() + " " + id);
+
+            if(id.equals((user.get(i)).getId()) && pwd.equals((user.get(i)).getPwd())){
+                Log.d("validLogin", "return 0");
+                return 0;
+            }else if(id.equals((user.get(i)).getId()) || pwd.equals((user.get(i)).getPwd())){
+                Log.d("validLogin", "return 2");
+                return 2;
+            }
+        }
+
+        Log.d("validLogin", "return 1");
+        return 1;
     }
 
     @Override
