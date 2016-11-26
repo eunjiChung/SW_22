@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,16 +18,18 @@ import java.util.ArrayList;
 public class ChatListActivity extends AppCompatActivity {
 
     ArrayList<String> ChatingData = new ArrayList<String>();
+    ArrayList<String> chatList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        ChatingData.add("이민호");
-        ChatingData.add("전지현");
-        ChatingData.add("김수현");
-        //외부에 짜서 호출하는 형식으로 짜야함
+
+        Intent intent = new Intent(this.getIntent());
+        chatList = intent.getStringArrayListExtra("room_list");
+        Log.d("chatList", chatList.toString());
+        ChatingData = chatList;
 
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,ChatingData);
         ListView listview = (ListView) findViewById(R.id.listview2);

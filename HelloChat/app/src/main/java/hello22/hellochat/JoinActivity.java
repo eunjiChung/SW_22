@@ -43,6 +43,7 @@ public class JoinActivity extends AppCompatActivity{
             Toast.makeText(this, "Welcome " + name + "!!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,FriendListActivity.class);
             intent.putExtra("flag", flag);
+            intent.putExtra("user_id", id);
             startActivity(intent);
         }
     }
