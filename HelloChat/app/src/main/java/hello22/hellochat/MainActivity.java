@@ -96,9 +96,12 @@ public class MainActivity extends AppCompatActivity {
             사용자가 READ_CONTACTS 권한을 거부한 적이 있는지 확인한다
             거부한 적이 있는 경우 True 리턴, 없는 경우 False 리턴.
              */
+        Log.d("Permission Check", "Checking Permission......");
         if (permissionCheck == PackageManager.PERMISSION_DENIED) {
             // 권한 없음
+            Toast.makeText(this, "권한이 없습니다.\n 권한을 얻어야합니다", Toast.LENGTH_LONG).show();
             if(shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)){
+                Log.d("Permission Check", "Getting permission.....");
                 AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
                 dialog.setTitle("권한이 필요합니다.")
                         .setMessage("이 앱을 사용하기 위해서는 단말기 \"주소록\" 권한이 필요합니다. 계속 하시겠습니까?")
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.e("Permission Check", "Didn't allow permission!!!!!!!");
                                 Toast.makeText(MainActivity.this, "기능을 취소했습니다", Toast.LENGTH_LONG).show();
                             }
                         })
