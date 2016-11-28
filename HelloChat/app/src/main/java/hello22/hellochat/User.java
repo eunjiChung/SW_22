@@ -42,8 +42,6 @@ public class User implements Parcelable {
         name = source.readString();
         phone = source.readString();
         pwd = source.readString();
-
-        // ?????
         source.readStringList(FriendList);
         source.readStringList(ChatList);
     }
