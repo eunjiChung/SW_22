@@ -15,6 +15,7 @@ public class JoinActivity extends AppCompatActivity{
     String id, pwd, name, phone;
     int flag;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,9 @@ public class JoinActivity extends AppCompatActivity{
         if(id.length() == 0 || pwd.length() == 0 || name.length() == 0 || phone.length() == 0){
             Toast.makeText(this, "Please insert all the info", Toast.LENGTH_LONG).show();
         }else{
+            User user = new User(this);
+            user.initialPreferences(id, phone, pwd);
+
             Toast.makeText(this, "Welcome " + name + "!!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,FriendListActivity.class);
             intent.putExtra("flag", flag);

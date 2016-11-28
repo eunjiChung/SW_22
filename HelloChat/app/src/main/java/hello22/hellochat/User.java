@@ -30,6 +30,9 @@ public class User implements Parcelable {
     SharedPreferences pref;
 
     public User(){}
+    public User(Context c){
+        pref = c.getSharedPreferences("pref", MODE_PRIVATE);
+    }
     public User(String id, Context c){
         this.id = id;
         pref = c.getSharedPreferences("pref", MODE_PRIVATE);
@@ -87,11 +90,26 @@ public class User implements Parcelable {
     }
 
 
+    public void initialPreferences(String id, String phone, String pwd){
+        SharedPreferences.Editor editor = pref.edit();
+        // check
 
-    /*
-    TODO : check getSharedPreferences need context??
-    Save FriendList in "friend" file by SharedPreferences
-     */
+        Log.d("Preference", "New user id : " + id);
+        Log.d("Preference", "New user phone : " + phone);
+        Log.d("Preference", "New user pwd : " + pwd);
+
+        try{
+            editor.putString("ID", id);
+            editor.putString("phone", phone);
+            editor.putString("pwd", pwd);
+            editor.commit();
+        } catch (Exception e){
+            Log.e("initiate", "Put user_info in file failed!!!!!1");
+        }
+
+    }
+
+
     public void setPreferences(){
         SharedPreferences.Editor editor = pref.edit();
         // check
@@ -107,9 +125,7 @@ public class User implements Parcelable {
         Log.d("preference", FriendList.toString());
     }
 
-    /*
-    Call FriendList in "friend" file by SharedPreferences
-     */
+
     public ArrayList<String> callPreferences(ArrayList<String> list){
         int size = pref.getInt("friend_size", 0);
 
@@ -120,7 +136,10 @@ public class User implements Parcelable {
         return list;
     }
 
+    // TODO : When app ends, preference also ends
+    public void clearPreferences(){
 
+    }
 
 
     /*

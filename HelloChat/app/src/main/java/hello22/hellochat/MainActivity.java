@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void ClickJoinButton(View v){
         flag = 1;
-
         Intent intent = new Intent(this, JoinActivity.class);
         intent.putExtra("flag", flag);
         startActivity(intent);
@@ -147,15 +146,6 @@ public class MainActivity extends AppCompatActivity {
             // Check Login validation
             if (validLogin(id, pwd) == 0) {
                 Toast.makeText(this, "Login Success!", Toast.LENGTH_LONG).show();
-
-//                // 접속 시 새로운 user 객체 생성, 이 객체로 user에 대한 정보 모두 관리
-//                user = new User(id, this);
-//                Log.d("User", user.FriendList.toString());
-//                //Log.d("User", )
-//                //user.userAdd();
-//                //user.setPreferences(this);
-//                user.callPreferences(user.FriendList);
-//                Log.d("User", user.FriendList.toString());
 
                 // Intent 실행
                 Intent intent = new Intent(this, FriendListActivity.class);
