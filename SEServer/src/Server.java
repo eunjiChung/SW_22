@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.json.JSONObject;
+import net.sf.json.*;
 
 public class Server {       
 	private static final int ServerPort = 22222;

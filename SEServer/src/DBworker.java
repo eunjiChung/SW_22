@@ -9,9 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
+import net.sf.json.*;
 
 
 public class DBworker implements Runnable {
@@ -48,7 +46,6 @@ public class DBworker implements Runnable {
 			if (!DBJobQueue.isEmpty()) {
 				// Poll in the job queue
 				JSONMsg_in = (JSONObject) DBJobQueue.poll();
-				try {
 					String Sender_pnum = (String) JSONMsg_in.get("Sender_pnum");
 					String Msg_type = (String) JSONMsg_in.get("Msg_type");
 
@@ -56,15 +53,14 @@ public class DBworker implements Runnable {
 					switch (Msg_type) {
 						case "Reg_user":
 							String User_name = (String) JSONMsg_in.get("User_name");
-							String User_pnum = (String) JSONMsg_in.get("User_pnum");
 							JSONArray Friend_in_JSONArray = JSONMsg_in.getJSONArray("Friend_pnum_list");
 							ArrayList<String> Friend_pnum_list = new ArrayList<String>();
 							if (Friend_in_JSONArray != null) {
-								for (int i = 0; i < Friend_in_JSONArray.length(); i++) {
+								for (int i = 0; i < Friend_in_JSONArray.size(); i++) {
 									Friend_pnum_list.add(Friend_in_JSONArray.get(i).toString());
 								}
 							}
-							RegistUser(Sender_pnum, User_name, User_pnum, Friend_pnum_list);
+							RegistUser(Sender_pnum, User_name, Friend_pnum_list);
 							break;
 						case "Add_friend":
 							break;
@@ -89,28 +85,25 @@ public class DBworker implements Runnable {
 						case "Del_anno":
 							break;
 					}
-				} catch (JSONException jsone) {
-					jsone.printStackTrace();
-				}
 			}
 		}
 	}
 	
-	public void RegistUser(String Sender_pnum, String User_name, String User_pnum, ArrayList<String> Friend_list_in) {
+	public void RegistUser(String Sender_pnum, String User_name, ArrayList<String> Friend_list_in) {
 		try {
 			List<String> Friend_list_out = new ArrayList<String>();
 			// Is it already exist user?
-			rs = st.executeQuery("select Upnum from Userlist where=\'" + User_pnum + "\';");
+			rs = st.executeQuery("select Upnum from Userlist where=\'" + Sender_pnum + "\';");
 			// If YES, not add user and send friend list
 			// If NO, add user and send friend list
 			if (rs.getString("upnum") != null) {
-				rs = st.executeQuery("select Flist from UserFriendlist where Upnum=\'" + User_pnum + "\';");
+				rs = st.executeQuery("select Flist from UserFriendlist where Upnum=\'" + Sender_pnum + "\';");
 				while (rs.next()) {
 					Friend_list_out.add(rs.getString("Flist"));
 				}
 			} else {
 				st.executeQuery("insert into Userlist (Upnum, Uname) values (\'"
-									+ User_pnum + "\', \'" + User_name + "\');");
+									+ Sender_pnum + "\', \'" + User_name + "\');");
 				ResultSet foundfriend_set;
 				String foundfriend_str;
 				Iterator<String> Friend_list_iter = Friend_list_in.iterator();
@@ -120,14 +113,14 @@ public class DBworker implements Runnable {
 					foundfriend_str = foundfriend_set.getString("Upnum");
 					Friend_list_out.add(foundfriend_str);
 					st.executeQuery("insert into UserFriendlist (Upnum, Flist) values (\'"
-									+ User_pnum + "\', \'" + foundfriend_str + "\');");
+									+ Sender_pnum + "\', \'" + foundfriend_str + "\');");
 				}
 			}
 			
 			// Create out message
 			JSONArray Friend_out_JSONArray = new JSONArray();
 			for (int i = 0; i < Friend_list_out.size(); i++) {
-				Friend_out_JSONArray.put(Friend_list_out.get(i));
+				Friend_out_JSONArray.add(Friend_list_out.get(i));
 			}
 			JSONMsg_out.put("Msg_type", "Reg_user");
 			JSONMsg_out.put("Friend_pnum", Friend_out_JSONArray);
@@ -181,9 +174,8 @@ public class DBworker implements Runnable {
 			for (int i = 0; i < Room_member_num; i++) {
 				Room_member = st.executeQuery("select Upnum from UserHasRoom where rid = " + rid 
 						+ " and Upnum <> \'" + Sender_pnum + "\';").getString("Upnum");
-				Recv_usr.put(Room_member);
+				Recv_usr.add(Room_member);
 			}
-			try {
 				JSONMsg_out.put("Msg_type", "Send_msg");
 				JSONMsg_out.put("Msg_id", mid);
 				JSONMsg_out.put("Text_msg", Text_msg);
@@ -192,9 +184,6 @@ public class DBworker implements Runnable {
 				JSONMsg_out.put("Send_usr", Sender_pnum);
 				JSONMsg_out.put("Recv_usr", Recv_usr);
 				JSONMsg_out.put("Room_id", rid);
-			} catch (org.json.JSONException jsone) {
-				jsone.printStackTrace();
-			}
 			SendJobQueue.add(JSONMsg_out);
 			
 		} catch (SQLException e) {

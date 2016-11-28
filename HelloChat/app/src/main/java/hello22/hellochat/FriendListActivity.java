@@ -39,6 +39,8 @@ public class FriendListActivity extends AppCompatActivity {
     String id;
     SharedPreferences pref;
     Intent intent;
+    
+    
 
     // 기존에 있다고 설정되는 세명, 임시 array
     String[] list = {"DummyA", "DummyB", "DummyC"};

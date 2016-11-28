@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     public LinkedList<JSONObject> DBJobQueue = null;
     public HashMap<String, Socket> UsrSocketAddr;
-    private String ip = "1.242.144.197";
-    private int port = 22222;
 
 
 
@@ -64,15 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
         // 임시로 유저가 있다고 가정 [aa, bb], 임시 데이터
         userAdd();
-
-
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
                 //소켓 생성, 연결
                 try {
                     Log.d("Client socket", "Trying to connect Server....");
-                    socket = new Socket(ip, port);
+                    while(SocketManager.getSocket() == null) {
+                    }
                 } catch (IOException e) {
                     Log.e("Client socket", "Failed to connect Server!!!!!");
                 }
@@ -82,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 //Client client = new Client(socket, , DBJobQueue);
             }
         }).start();
-
     }
 
 
@@ -130,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     public void ClickJoinButton(View v){
         flag = 1;
         Intent intent = new Intent(this, JoinActivity.class);
-        intent.putExtra("flag", flag);
+        intent.putExtra("flag", flag);     
         startActivity(intent);
     }
 
@@ -180,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
+    	
         moveTaskToBack(true);
         finish();
         android.os.Process.killProcess(android.os.Process.myPid());

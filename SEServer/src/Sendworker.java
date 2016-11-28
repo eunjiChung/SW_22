@@ -6,9 +6,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import net.sf.json.*;
 
 
 public class Sendworker implements Runnable {
@@ -25,7 +23,6 @@ public class Sendworker implements Runnable {
 	
 	public void run() {
 		while(true) {
-			try {
 				if (!SendJobQueue.isEmpty()) {
 					// Poll in the job queue
 					JSONMsg = SendJobQueue.poll();
@@ -43,16 +40,13 @@ public class Sendworker implements Runnable {
 						case "Send_msg":
 							// Send to all room member
 							JSONArray Recv_usr = JSONMsg.getJSONArray("Recv_usr");
-							for (int i = 0; i < Recv_usr.length(); i++) {
+							for (int i = 0; i < Recv_usr.size(); i++) {
 								socket = UsrSocketAddr.get(Recv_usr.get(i));
 								Send(socket, JSONMsg);
 							}
 							break;
 					}
 				}
-			} catch (JSONException jsone) {
-				jsone.printStackTrace();
-			}
 		}
 	}
 	

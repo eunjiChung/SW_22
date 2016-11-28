@@ -5,12 +5,11 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import net.sf.json.*;
 
 
 public class Client implements Runnable {
-	public String User_pnum;
+	public String User_pnum = null;
 	BufferedReader in;
 	
 	Socket socket;
@@ -37,11 +36,13 @@ public class Client implements Runnable {
 	public void run() {
 		while (true) {
 			try{
-				JSONMsg = new JSONObject(in.readLine());
-				this.User_pnum = JSONMsg.get("Sender_pnum").toString();
-				// Add the user phone number and socket
-				if (ActiveUser.get(this.User_pnum) != null) {
-					ActiveUser.put(this.User_pnum, socket);
+				JSONMsg = JSONObject.fromObject(in.readLine());
+				if (this.User_pnum == null) {
+					this.User_pnum = JSONMsg.get("Sender_pnum").toString();
+					// Add the user phone number and socket
+					if (ActiveUser.get(this.User_pnum) != null) {
+						ActiveUser.put(this.User_pnum, socket);
+					}
 				}
 				DBJobQueue.add(JSONMsg);
 			} catch (Exception e) {
