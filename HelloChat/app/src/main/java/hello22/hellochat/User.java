@@ -22,12 +22,13 @@ import static android.content.Context.MODE_PRIVATE;
 /*
  앱 사용자에 대한 정보를 저장해놓는다
  */
-public class User implements Parcelable {
+public class User implements Parcelable{
 
     String id, name, phone, pwd;
     ArrayList<String> FriendList = new ArrayList<>();
     ArrayList<String> ChatList = new ArrayList<>();
     SharedPreferences pref;
+    Worker worker = new Worker();
 
     public User(){}
     public User(Context c){
@@ -75,7 +76,6 @@ public class User implements Parcelable {
 
 
     // Dummy users
-    // TODO : users have to keep live before app ends...
     public void userAdd(){
         Log.d("userAdd", "Working...");
         FriendList.add(id);
@@ -89,86 +89,27 @@ public class User implements Parcelable {
 
 
     public void initialPreferences(String id, String phone, String pwd){
-        SharedPreferences.Editor editor = pref.edit();
-        // check
-
-        Log.d("Preference", "New user id : " + id);
-        Log.d("Preference", "New user phone : " + phone);
-        Log.d("Preference", "New user pwd : " + pwd);
-
-        try{
-            editor.putString("ID", id);
-            editor.putString("phone", phone);
-            editor.putString("pwd", pwd);
-            editor.commit();
-        } catch (Exception e){
-            Log.e("initiate", "Put user_info in file failed!!!!!1");
-        }
-
+        worker.initialPreferences(id, phone, pwd);
     }
 
 
     public void setPreferences(){
-        SharedPreferences.Editor editor = pref.edit();
-        // check
-
-        editor.putInt("friend_size", FriendList.size());
-        Log.d("Preference", "Friend List size : " + FriendList.size());
-
-        for (int i = 0; i < FriendList.size(); i++){
-            editor.putString("friend_" + i, FriendList.get(i));
-        }
-        editor.commit();
-
-        Log.d("preference", FriendList.toString());
+        worker.setPreferences();
     }
 
 
     public ArrayList<String> callPreferences(ArrayList<String> list){
-        int size = pref.getInt("friend_size", 0);
-
-        for(int i = 0; i < size; i++){
-            list.add(pref.getString("friend_" + i, null));
-        }
-
-        return list;
+        return worker.callPreferences(list);
     }
 
     // TODO : When app ends, preference also ends
     public void clearPreferences(){
+        worker.clearPreferences();
 
     }
 
-
-    /*
-      READ_CONTACTS from phone
-      UPDATE FriendList
-     */
     public ArrayList<User> GetAddress(Context c) {
-        ArrayList<User> userList = new ArrayList<>();
-        Log.d("GetAddress", "Working GetAddress!!!!!!!!!");
-
-        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        Cursor cursor = c.getContentResolver().query(uri, null, null, null, null);
-
-        try {
-            cursor.moveToFirst();
-            do{
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                User user = new User();
-                user.setId(name);
-                user.setName(name);
-                user.setPhone(phoneNumber);
-                userList.add(user);
-                Log.d("user info", name + " " + phoneNumber);
-            } while(cursor.moveToNext());
-        } catch (Exception e){
-            Log.e("GetAddresss", e.toString());
-        }
-
-        return userList;
+        return worker.GetAddress(c);
     }
 
     @Override
