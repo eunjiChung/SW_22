@@ -40,6 +40,7 @@ public class FriendListActivity extends AppCompatActivity {
     ArrayList<User> userList = new ArrayList<>();
     ArrayList<String> FriendList = new ArrayList<>();
     SharedPreferences pref;
+    Intent intent;
     // 기존에 있다고 설정되는 세명, 임시 array
     String[] list = {"DummyA", "DummyB", "DummyC"};
     /**
@@ -57,11 +58,10 @@ public class FriendListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         flag = intent.getIntExtra("flag", 2);
-
-        // 사용자 id -> TODO : indicate user too
-        id = intent.getStringExtra("user_id");
+//        id = intent.getStringExtra("user_id");
+//        user = new User(id, this);
         checkFlag();
 
         //Order(Before Adapter Create)
@@ -103,6 +103,8 @@ public class FriendListActivity extends AppCompatActivity {
                          */
 
                         int check = checkChatList(FriendList.get(position));
+                        Log.d("checkChatList", "chat list flag: " + check);
+
                         if (check == 1) {
                             //채팅방 존재
                         } else if(check == 0) {
@@ -110,15 +112,20 @@ public class FriendListActivity extends AppCompatActivity {
                             // 새로운 채팅방 생성 -> TODO : 서버와 통신하여 새로운 chatList 추가
                             user.addChatList(FriendList.get(position));
 
-                            Intent intent = new Intent(FriendListActivity.this, ChatListActivity.class);
-                            intent.putStringArrayListExtra("room_list", user.ChatList);
+                            try {
+                                Intent intent = new Intent(FriendListActivity.this, ChatListActivity.class);
+                                intent.putExtra("user", user);
+                                Log.d("checkChatList", "ChatList: " + user.ChatList.toString());
+                                Log.d("checkChatList", "FriendList: " + user.FriendList.toString());
+                            }catch (Exception e){
+                                Log.e("checkChatList", "Sending to ChatListActivity failed!!!");
+                            }
                         }
 
                         Intent intent = new Intent(FriendListActivity.this, ChatRoomActivity.class);
                         intent.putExtra("name", FriendList.get(position));
-
                         Intent intent2 = new Intent(FriendListActivity.this, ChatListActivity.class);
-                        intent2.putExtra("room_name", FriendList.get(position));
+                        intent2.putExtra("user", user);
                         startActivity(intent);
                     }
                 });
@@ -155,11 +162,13 @@ public class FriendListActivity extends AppCompatActivity {
 
     public void ClickChatListButton(View v) {
         Intent intent = new Intent(this, ChatListActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 
     public void ClickSettingButton(View v) {
         Intent intent = new Intent(this, SettingActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 
@@ -172,21 +181,25 @@ public class FriendListActivity extends AppCompatActivity {
 
 
     public void checkFlag() {
-        user = new User(id);
         /*
          0 : startButton
          1 : joinButton -> Call FriendList
          2 : came from other Activity
         */
         if (flag == 0) {
+            id = intent.getStringExtra("user_id");
+            user = new User(id, this);
             Log.d("userList", "FLAG " + flag + " : Starting App....");
+
             //임시 작업
-            //user.userAdd();
+            user.userAdd();
             //TODO: 만약 새로운 친구를 추가했다면, setPreference 실행
-            user.setPreferences(this);
-            //Log.d("User Friend", "Friend List: " + (user.callPreferences(user.FriendList)).toString());
+            //user.setPreferences(this);
+            Log.d("User Friend", "Friend List: " + (user.callPreferences(user.FriendList)).toString());
         } else if (flag == 1) {
             // Check the sub user
+            id = intent.getStringExtra("user_id");
+            user = new User(id, this);
             Log.d("userList", "FLAG " + flag + " : Starting App....");
             Log.d("userList", "Trying to update friendList....");
 
@@ -208,6 +221,7 @@ public class FriendListActivity extends AppCompatActivity {
             Log.d("userList", "Done updating List!!");
         } else if(flag == 2){
             Log.d("userList", "FLAG " + flag);
+            user = intent.getParcelableExtra("user");
         } else{
             Log.e("FriendListActivityError", "This is wrong flag!!!!!!!");
         }

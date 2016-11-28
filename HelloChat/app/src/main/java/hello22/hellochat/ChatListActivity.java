@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ChatListActivity extends AppCompatActivity {
 
     ArrayList<String> ChatingData = new ArrayList<String>();
-    ArrayList<String> chatList = new ArrayList<>();
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +26,11 @@ public class ChatListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_list);
 
 
+        Log.d("chatList", "Starting chat list activity......");
         Intent intent = new Intent(this.getIntent());
-        chatList = intent.getStringArrayListExtra("room_list");
-        Log.d("chatList", chatList.toString());
-        ChatingData = chatList;
+        user = intent.getParcelableExtra("user");
+        Log.d("chatList", "Existing chatList: " + user.ChatList.toString());
+        ChatingData = user.getChatList();
 
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,ChatingData);
         ListView listview = (ListView) findViewById(R.id.listview2);
@@ -73,11 +74,13 @@ public class ChatListActivity extends AppCompatActivity {
     public void ClickFriendButton(View v)
     {
         Intent intent = new Intent(this,FriendListActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
     public void ClickSettingButton(View v)
     {
         Intent intent = new Intent(this,SettingActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 

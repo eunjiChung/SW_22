@@ -22,7 +22,7 @@ import static android.content.Context.MODE_PRIVATE;
 /*
  앱 사용자에 대한 정보를 저장해놓는다
  */
-public class User {
+public class User implements Parcelable {
 
     String id, name, phone, pwd;
     ArrayList<String> FriendList = new ArrayList<>();
@@ -30,9 +30,32 @@ public class User {
     SharedPreferences pref;
 
     public User(){}
-    public User(String id){
+    public User(String id, Context c){
         this.id = id;
+        pref = c.getSharedPreferences("pref", MODE_PRIVATE);
     }
+    private User(Parcel source){
+        id = source.readString();
+        name = source.readString();
+        phone = source.readString();
+        pwd = source.readString();
+
+        // ?????
+        source.readStringList(FriendList);
+        source.readStringList(ChatList);
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getId() { return id; }
     public void setId(String id) {this.id = id;}
@@ -53,7 +76,8 @@ public class User {
     // Dummy users
     // TODO : users have to keep live before app ends...
     public void userAdd(){
-        //FriendList.add(user_id);
+        Log.d("userAdd", "Working...");
+        FriendList.add(id);
         FriendList.add("수지");
         FriendList.add("박보검");
         FriendList.add("혜리");
@@ -68,12 +92,12 @@ public class User {
     TODO : check getSharedPreferences need context??
     Save FriendList in "friend" file by SharedPreferences
      */
-    public void setPreferences(Context c){
-        pref = c.getSharedPreferences("pref", MODE_PRIVATE);
+    public void setPreferences(){
         SharedPreferences.Editor editor = pref.edit();
         // check
 
         editor.putInt("friend_size", FriendList.size());
+        Log.d("Preference", "Friend List size : " + FriendList.size());
 
         for (int i = 0; i < FriendList.size(); i++){
             editor.putString("friend_" + i, FriendList.get(i));
@@ -130,4 +154,18 @@ public class User {
         return userList;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(name);
+        parcel.writeString(phone);
+        parcel.writeString(pwd);
+        parcel.writeStringList(FriendList);
+        parcel.writeStringList(ChatList);
+    }
 }

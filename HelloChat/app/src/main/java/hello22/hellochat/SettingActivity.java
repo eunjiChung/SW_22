@@ -18,11 +18,14 @@ public class SettingActivity extends AppCompatActivity {
     LinearLayout set_layout;
     LayoutInflater inflater;
     boolean visible = false;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        Intent intent = new Intent(this.getIntent());
+        user = intent.getParcelableExtra("user");
 
     }
 
@@ -46,11 +49,13 @@ public class SettingActivity extends AppCompatActivity {
     public void ClickFriendButton(View v)
     {
         Intent intent = new Intent(this,FriendListActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
     public void ClickChatListButton(View v)
     {
         Intent intent = new Intent(this,ChatListActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 

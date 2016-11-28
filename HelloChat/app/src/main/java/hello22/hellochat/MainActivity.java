@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         checkPerm();
         //시작 화면 3초 보여주기
         startActivity(new Intent(this, SplashActivity.class));
-        //TODO : 이 애니메이션은 제대로 실행되는지..ㅜㅜ
         overridePendingTransition(R.anim.anim_fade, R.anim.anim_hold);
+
         // 임시로 유저가 있다고 가정 [aa, bb], 임시 데이터
         userAdd();
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // TODO : Server측에서 확인.......
-                Log.d("Client socket", "Client socket accepted by server!!!");
+                //Log.d("Client socket", "Client socket accepted by server!!!");
                 //Client client = new Client(socket, , DBJobQueue);
             }
         }).start();
@@ -148,15 +148,19 @@ public class MainActivity extends AppCompatActivity {
             if (validLogin(id, pwd) == 0) {
                 Toast.makeText(this, "Login Success!", Toast.LENGTH_LONG).show();
 
-                // 접속 시 새로운 user 객체 생성, 이 객체로 user에 대한 정보 모두 관리
-                user = new User(id);
+//                // 접속 시 새로운 user 객체 생성, 이 객체로 user에 대한 정보 모두 관리
+//                user = new User(id, this);
+//                Log.d("User", user.FriendList.toString());
+//                //Log.d("User", )
+//                //user.userAdd();
+//                //user.setPreferences(this);
+//                user.callPreferences(user.FriendList);
+//                Log.d("User", user.FriendList.toString());
 
                 // Intent 실행
                 Intent intent = new Intent(this, FriendListActivity.class);
                 intent.putExtra("flag", flag);
                 intent.putExtra("user_id", id);
-                Log.d("User", "Done passing parcelable user data");
-
                 startActivity(intent);
             } else if(validLogin(id, pwd) == 2){
                 Toast.makeText(this, "Please Check your id or pwd", Toast.LENGTH_LONG).show();
