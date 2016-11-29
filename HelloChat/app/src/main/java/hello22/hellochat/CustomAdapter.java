@@ -104,7 +104,6 @@ public class CustomAdapter extends BaseAdapter {
             viewRight.setVisibility(View.VISIBLE);
             viewLeft.setVisibility(View.VISIBLE);
         }
-
         return convertView;
     }
 

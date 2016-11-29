@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     public HashMap<String, Socket> UsrSocketAddr;
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

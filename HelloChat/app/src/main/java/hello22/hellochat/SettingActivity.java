@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private long lastTimeBackPressed;
     LinearLayout set_layout;
     LayoutInflater inflater;
     boolean visible = false;

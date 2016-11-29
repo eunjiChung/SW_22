@@ -39,17 +39,11 @@ public class FriendListActivity extends AppCompatActivity {
     String id;
     SharedPreferences pref;
     Intent intent;
-    
-    
 
     // 기존에 있다고 설정되는 세명, 임시 array
     String[] list = {"DummyA", "DummyB", "DummyC"};
     ArrayList<User> userList = new ArrayList<>();
     ArrayList<String> FriendList = new ArrayList<>();
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +138,6 @@ public class FriendListActivity extends AppCompatActivity {
         Process.killProcess(Process.myPid());
     }
 
-
     public void checkFlag() {
 
         if (flag == 0) {
@@ -188,7 +181,6 @@ public class FriendListActivity extends AppCompatActivity {
             Log.e("FriendListActivityError", "This is wrong flag!!!!!!!");
         }
     }
-
 
     public int checkChatList(String rName) {
         ArrayList<String> list = user.getChatList();
