@@ -34,7 +34,7 @@ public class Client implements Runnable {
 	}
 	
 	public void run() {
-		while (true) {
+		while (socket!=null) {
 			try{
 				JSONMsg = JSONObject.fromObject(in.readLine());
 				if (this.User_pnum == null) {

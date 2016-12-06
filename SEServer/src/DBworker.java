@@ -46,9 +46,11 @@ public class DBworker implements Runnable {
 			if (!DBJobQueue.isEmpty()) {
 				// Poll in the job queue
 				JSONMsg_in = (JSONObject) DBJobQueue.poll();
-					String Sender_pnum = (String) JSONMsg_in.get("Sender_pnum");
-					String Msg_type = (String) JSONMsg_in.get("Msg_type");
-
+				String Sender_pnum = (String) JSONMsg_in.get("Sender_pnum");
+				System.out.println("Sender_pnum: " + Sender_pnum);
+				String Msg_type = (String) JSONMsg_in.get("Msg_type");
+				System.out.println("Msg_type: " + Msg_type);
+				
 					// Convert JSON to java type and Call method
 					switch (Msg_type) {
 						case "Reg_user":
