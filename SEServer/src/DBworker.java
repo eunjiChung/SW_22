@@ -5,9 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.BlockingQueue;
 
 import net.sf.json.*;
 
@@ -19,13 +19,13 @@ public class DBworker implements Runnable {
 	private ResultSet rs;
 	
 	// Shared Queue
-	public LinkedList<JSONObject> DBJobQueue = null;
+	public BlockingQueue<JSONObject> DBJobQueue = null;
 	public JSONObject JSONMsg_in = null;
 	public JSONObject JSONMsg_out = null;
-	public LinkedList<JSONObject> SendJobQueue = null;
+	public BlockingQueue<JSONObject> SendJobQueue = null;
 	
 	// Constructor
-	public DBworker(LinkedList<JSONObject> DBJobQueue, LinkedList<JSONObject> SendJobQueue) {
+	public DBworker(BlockingQueue<JSONObject> DBJobQueue, BlockingQueue<JSONObject> SendJobQueue) {
 		try {
 			// Connect Database
 			con = DriverManager.getConnection("jdbc:mysql://localhost/seserverdb", "chatserver", "007459df");
@@ -42,80 +42,88 @@ public class DBworker implements Runnable {
 	
 	@Override
 	public void run() {
+		System.out.println(Thread.currentThread().getName() + " : DBworker Start");
 		while (true) {
-			if (!DBJobQueue.isEmpty()) {
-				// Poll in the job queue
-				JSONMsg_in = (JSONObject) DBJobQueue.poll();
-				String Sender_pnum = (String) JSONMsg_in.get("Sender_pnum");
-				System.out.println("Sender_pnum: " + Sender_pnum);
-				String Msg_type = (String) JSONMsg_in.get("Msg_type");
-				System.out.println("Msg_type: " + Msg_type);
+			// Poll in the job queue
+			try {
+				JSONMsg_in = (JSONObject) DBJobQueue.take();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String Sender_pnum = (String) JSONMsg_in.get("Sender_pnum");
+			System.out.println("Sender_pnum: " + Sender_pnum);
+			String Msg_type = (String) JSONMsg_in.get("Msg_type");
+			System.out.println("Msg_type: " + Msg_type);
 				
-					// Convert JSON to java type and Call method
-					switch (Msg_type) {
-						case "Reg_user":
-							String User_name = (String) JSONMsg_in.get("User_name");
-							JSONArray Friend_in_JSONArray = JSONMsg_in.getJSONArray("Friend_pnum_list");
-							ArrayList<String> Friend_pnum_list = new ArrayList<String>();
-							if (Friend_in_JSONArray != null) {
-								for (int i = 0; i < Friend_in_JSONArray.size(); i++) {
-									Friend_pnum_list.add(Friend_in_JSONArray.get(i).toString());
-								}
-							}
-							RegistUser(Sender_pnum, User_name, Friend_pnum_list);
-							break;
-						case "Add_friend":
-							break;
-						case "Drop_user":
-							break;
-						case "Send_msg":
-							// 1:1 Chat
-							String Friend_pnum = (String) JSONMsg_in.get("Friend_pnum");
-							String Text_msg = (String) JSONMsg_in.get("Text_msg");
-							SendMessage(Sender_pnum, Friend_pnum, Text_msg);
-							break;
-						case "Inv_friend":
-							break;
-						case "Out_room":
-							break;
-						case "Giv_master":
-							break;
-						case "Fout_room":
-							break;
-						case "Set_anno":
-							break;
-						case "Del_anno":
-							break;
+			// Convert JSON to java type and Call method
+			switch (Msg_type) {
+			case "Reg_user":
+				String User_name = (String) JSONMsg_in.get("User_name");
+				JSONArray Friend_in_JSONArray = JSONMsg_in.getJSONArray("Friend_pnum_list");
+				ArrayList<String> Friend_pnum_list = new ArrayList<String>();
+				if (Friend_in_JSONArray != null) {
+					for (int i = 0; i < Friend_in_JSONArray.size(); i++) {
+						Friend_pnum_list.add(Friend_in_JSONArray.get(i).toString());
 					}
+				}
+				RegistUser(Sender_pnum, User_name, Friend_pnum_list);
+				break;
+			case "Add_friend":
+				break;
+			case "Drop_user":
+				break;
+			case "Send_msg":
+				// 1:1 Chat
+				String Friend_pnum = (String) JSONMsg_in.get("Friend_pnum");
+				String Text_msg = (String) JSONMsg_in.get("Text_msg");
+				SendMessage(Sender_pnum, Friend_pnum, Text_msg);
+				break;
+			case "Inv_friend":
+				break;
+			case "Out_room":
+				break;
+			case "Giv_master":
+				break;
+			case "Fout_room":
+				break;
+			case "Set_anno":
+				break;
+			case "Del_anno":
+				break;
 			}
 		}
-	}
+}
 	
 	public void RegistUser(String Sender_pnum, String User_name, ArrayList<String> Friend_list_in) {
 		try {
 			List<String> Friend_list_out = new ArrayList<String>();
+			rs = null;
 			// Is it already exist user?
-			rs = st.executeQuery("select Upnum from Userlist where=\'" + Sender_pnum + "\';");
+			rs = st.executeQuery("select Upnum from Userlist where Upnum = \'" + Sender_pnum + "\';");
 			// If YES, not add user and send friend list
 			// If NO, add user and send friend list
-			if (rs.getString("upnum") != null) {
+			if (rs.next()) {
 				rs = st.executeQuery("select Flist from UserFriendlist where Upnum=\'" + Sender_pnum + "\';");
 				while (rs.next()) {
 					Friend_list_out.add(rs.getString("Flist"));
 				}
 			} else {
-				st.executeQuery("insert into Userlist (Upnum, Uname) values (\'"
+				st.executeUpdate("insert into Userlist (Upnum, Uname) values (\'"
 									+ Sender_pnum + "\', \'" + User_name + "\');");
-				ResultSet foundfriend_set;
-				String foundfriend_str;
-				Iterator<String> Friend_list_iter = Friend_list_in.iterator();
-				while (Friend_list_iter.hasNext()) {
+				ResultSet foundfriend_set = null;
+				String foundfriend_str = null;
+				for (int i = 0; i < Friend_list_in.size(); i++) {
+					String str = Friend_list_in.get(i);
+					System.out.println("Freind_list_in[" + i + "] : " + str);
 					foundfriend_set = st.executeQuery("select Upnum from Userlist where Upnum=\'"
-							 + Friend_list_iter.next() + "\';");
-					foundfriend_str = foundfriend_set.getString("Upnum");
-					Friend_list_out.add(foundfriend_str);
-					st.executeQuery("insert into UserFriendlist (Upnum, Flist) values (\'"
-									+ Sender_pnum + "\', \'" + foundfriend_str + "\');");
+							 + str + "\';");
+					if (foundfriend_set.next()) {
+						foundfriend_str = foundfriend_set.getString("Upnum");
+						Friend_list_out.add(foundfriend_str);
+						st.executeUpdate("insert into UserFriendlist (Upnum, Flist) values (\'"
+										+ Sender_pnum + "\', \'" + foundfriend_str + "\');");
+					}
 				}
 			}
 			
@@ -124,6 +132,8 @@ public class DBworker implements Runnable {
 			for (int i = 0; i < Friend_list_out.size(); i++) {
 				Friend_out_JSONArray.add(Friend_list_out.get(i));
 			}
+			JSONMsg_out = new JSONObject();
+			JSONMsg_out.put("Sender_pnum", Sender_pnum);
 			JSONMsg_out.put("Msg_type", "Reg_user");
 			JSONMsg_out.put("Friend_pnum", Friend_out_JSONArray);
 			
@@ -158,14 +168,14 @@ public class DBworker implements Runnable {
 				rid = st.executeQuery("select count(*) from Roomlist;").getInt(0) + 1;
 				mid = 1;
 				// Create Room
-				st.executeQuery("insert into Roomlist (Rid, Isgroup, Announce, Rmaster) "
+				st.executeUpdate("insert into Roomlist (Rid, Isgroup, Announce, Rmaster) "
 						+ "values (" + rid + ", 0, \'\', \'\');");
-				st.executeQuery("insert into UserHasRoom (Upnum, Rid) values "
+				st.executeUpdate("insert into UserHasRoom (Upnum, Rid) values "
 						+ "(\'" + Sender_pnum + ", " + rid + ";");
-				st.executeQuery("insert into UserHasRoom (Upnum, Rid) values "
+				st.executeUpdate("insert into UserHasRoom (Upnum, Rid) values "
 						+ "(\'" + Friend_pnum + ", " + rid + ";");	
 			}
-			st.executeQuery("insert into Messagelist (Msgid, Textmsg, Readcnt, Sendtime, Sendusr, Rid) "
+			st.executeUpdate("insert into Messagelist (Msgid, Textmsg, Readcnt, Sendtime, Sendusr, Rid) "
 					+ "values (" + mid + ", " + Text_msg + ", 2, \'" + nowTime_str + "\', \'" 
 					+ Sender_pnum + "\', " + rid + ";");
 			
@@ -194,5 +204,4 @@ public class DBworker implements Runnable {
 		}
 	}
 	
-
 }

@@ -3,6 +3,8 @@ import java.net.ServerSocket;
 import java.net.Socket;  
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import net.sf.json.*;
 
@@ -11,16 +13,16 @@ public class Server {
 	private static final String ServerIP = "1.242.144.197";
 
 	// Thread Share Data
-	private static LinkedList<JSONObject> DBJobQueue;
-	private static LinkedList<JSONObject> SendJobQueue;
+	private static BlockingQueue<JSONObject> DBJobQueue;
+	private static BlockingQueue<JSONObject> SendJobQueue;
 	private static HashMap<String, Socket> ActiveUser;
 	
 	
 	public static void main(String[] args) {
 		ServerSocket serversocket = null;
 		Socket socket = null;
-		DBJobQueue = new LinkedList<JSONObject>();
-		SendJobQueue = new LinkedList<JSONObject>();
+		DBJobQueue = new ArrayBlockingQueue<JSONObject>(100);
+		SendJobQueue = new ArrayBlockingQueue<JSONObject>(100);
 		ActiveUser = new HashMap<String, Socket>();
 		
 		// Create DBworker Thread
@@ -40,11 +42,14 @@ public class Server {
 			// Multi User Connect
 			while (true) {
 				socket = serversocket.accept();
-				System.out.print("Connected IP: " + socket.getInetAddress() + "\n");
-				Runnable UserRun = new Client(socket, ActiveUser, DBJobQueue);
-				Thread UserThread = new Thread(UserRun);
+				if (socket.isConnected()) {
+					System.out.print("Connected IP: " + socket.getInetAddress() + "\n");
+					Runnable UserRun = new Client(socket, ActiveUser, DBJobQueue);
+					Thread UserThread = new Thread(UserRun);
 				
-				UserThread.start();
+					UserThread.start();
+					System.out.println(UserThread.getName() + " : Start");
+				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
